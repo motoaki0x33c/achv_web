@@ -1,47 +1,46 @@
-# 使用 PHP 8.4 FPM 作為基礎映像
+# 使用 PHP 8.4 基礎映像（含 FPM）
 FROM php:8.4-fpm
 
-# 安裝必要的系統套件
+# 安裝必要套件
 RUN apt-get update && apt-get install -y \
+    nginx \
     git \
     curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
     zip \
     unzip \
-    nginx \
-    supervisor
-
-# 安裝 PHP 擴展
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
 
 # 安裝 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 設定工作目錄
-WORKDIR /var/www/html
+# 建立目錄
+WORKDIR /var/www
 
-# 複製應用程式檔案
+# 複製 Laravel 專案檔案
 COPY . .
 
-# 安裝依賴
+# 安裝 PHP 套件
 RUN composer install --no-dev --optimize-autoloader
 
-# 設定權限
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-# 複製 PHP-FPM 設定
-COPY docker/www.conf /usr/local/etc/php-fpm.d/www.conf
-
-# 複製 Nginx 設定
+# 複製 Nginx 設定檔
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
-# 複製 Supervisor 設定
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# 編譯前端資源（視情況調整）
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install && npm run build
 
-# 暴露端口
+# 設定權限
+RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage
+
+# Laravel 環境變數
+ENV APP_ENV=production
+
+# Cloud Run 要求公開 port 為 8080
 EXPOSE 8080
 
-# 啟動 Supervisor
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"] 
+# 啟動 Nginx + PHP-FPM
+CMD service php8.4-fpm start && nginx -g "daemon off;"
