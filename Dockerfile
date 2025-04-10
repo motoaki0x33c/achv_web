@@ -42,5 +42,5 @@ ENV APP_ENV=production
 # Cloud Run 要求公開 port 為 8080
 EXPOSE 8080
 
-# 啟動 Nginx + PHP-FPM
-CMD service php8.4-fpm start && nginx -g "daemon off;"
+# 啟動指令
+CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
