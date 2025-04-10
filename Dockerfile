@@ -31,6 +31,9 @@ RUN composer install --no-dev --optimize-autoloader
 # 設定權限
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
+# 複製 PHP-FPM 設定
+COPY docker/www.conf /usr/local/etc/php-fpm.d/www.conf
+
 # 複製 Nginx 設定
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 
