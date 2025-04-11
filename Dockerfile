@@ -40,7 +40,7 @@ RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage
 ENV APP_ENV=production
 
 # Cloud Run 要求公開 port 為 8080
-EXPOSE 8080
+EXPOSE 80
 
 # 啟動指令
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
