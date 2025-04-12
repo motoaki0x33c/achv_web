@@ -27,6 +27,10 @@ COPY . /var/www
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
 
+# 解壓縮 env 設定檔
+ARG env_key
+RUN unzip -o -P $env_key env_prod.zip
+
 # 安裝 PHP 套件
 RUN composer install --no-dev --optimize-autoloader
 
