@@ -29,6 +29,7 @@ RUN chown -R www-data:www-data /var/www \
 
 # 解壓縮 env 設定檔
 ARG env_key
+RUN echo "env_key is [$env_key]"
 RUN unzip -o -P $env_key env_prod.zip
 
 # 安裝 PHP 套件
