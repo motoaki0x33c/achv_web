@@ -1,46 +1,37 @@
-# 使用 PHP 8.4 基礎映像（含 FPM）
+# 使用 PHP 8.4 FPM
 FROM php:8.4-fpm
 
-# 安裝必要套件
+# 安裝套件
 RUN apt-get update && apt-get install -y \
     nginx \
     git \
-    curl \
-    zip \
     unzip \
-    libonig-dev \
-    libxml2-dev \
+    curl \
     libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl
+    zip \
+    && docker-php-ext-install pdo pdo_mysql zip
 
 # 安裝 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 建立目錄
+# 複製 nginx 設定
+COPY docker/nginx.conf /etc/nginx/sites-available/default
+
+# 設定工作目錄
 WORKDIR /var/www
 
-# 複製 Laravel 專案檔案
-COPY . .
+# 複製整個 Laravel 專案進去容器
+COPY . /var/www
+
+# 設定權限（避免 storage/logs 沒權限）
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www/storage
 
 # 安裝 PHP 套件
 RUN composer install --no-dev --optimize-autoloader
 
-# 複製 Nginx 設定檔
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-
-# 編譯前端資源（視情況調整）
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install && npm run build
-
-# 設定權限
-RUN chown -R www-data:www-data /var/www && chmod -R 755 /var/www/storage
-
-# Laravel 環境變數
-ENV APP_ENV=production
-
-# Cloud Run 要求公開 port 為 8080
+# Cloud Run 開 port 為 80
 EXPOSE 80
 
-# 啟動指令
-CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
+# 啟動 nginx 和 php-fpm
+CMD service nginx start && php-fpm
