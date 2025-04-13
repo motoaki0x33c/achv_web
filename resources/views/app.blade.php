@@ -4,10 +4,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- 強制所有資源使用 HTTPS -->
-        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-        <meta http-equiv="Content-Security-Policy" content="default-src https: 'unsafe-inline' 'unsafe-eval';">
-
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
