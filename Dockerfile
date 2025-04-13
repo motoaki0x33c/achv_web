@@ -34,8 +34,8 @@ RUN unzip -o -P $env_key env_prod.zip
 # 安裝 PHP 套件
 RUN composer install --no-dev --optimize-autoloader
 
-# Cloud Run 開 port 為 80
-EXPOSE 80
+# 開 port
+EXPOSE 443
 
 # 啟動 nginx 和 php-fpm
 CMD service nginx start && php-fpm
