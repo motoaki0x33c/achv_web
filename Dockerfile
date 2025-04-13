@@ -35,8 +35,7 @@ RUN unzip -o -P $env_key env_prod.zip
 RUN composer install --no-dev --optimize-autoloader
 
 # 開 port
-EXPOSE 80
-EXPOSE 443
+EXPOSE 8080
 
 # 啟動 nginx 和 php-fpm
 CMD service nginx start && php-fpm
