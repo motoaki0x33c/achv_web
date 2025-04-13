@@ -14,6 +14,12 @@ RUN apt-get update && apt-get install -y \
 # 安裝 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install supervisor
+RUN apt-get install -y supervisor
+
+# 複製 supervisord 設定
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # 複製 nginx 設定
 COPY docker/nginx.conf /etc/nginx/sites-available/default
 
@@ -37,5 +43,5 @@ RUN composer install --no-dev --optimize-autoloader
 # 開 port
 EXPOSE 8080
 
-# 啟動 nginx 和 php-fpm
-CMD service nginx start && php-fpm
+# 啟動 supervisord
+CMD ["/usr/bin/supervisord"]
