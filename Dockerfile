@@ -40,6 +40,9 @@ RUN unzip -o -P $env_key env_prod.zip
 # 安裝 PHP 套件
 RUN composer install --no-dev --optimize-autoloader
 
+# 安裝 npm 前端套件
+RUN npm install && npm run build
+
 # 開 port
 EXPOSE 8080
 
