@@ -9,13 +9,13 @@ RUN apt-get update && apt-get install -y \
     curl \
     libzip-dev \
     zip \
+    nodejs \
+    npm \
+    supervisor \
     && docker-php-ext-install pdo pdo_mysql zip
 
 # 安裝 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Install supervisor
-RUN apt-get install -y supervisor
 
 # 複製 supervisord 設定
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
