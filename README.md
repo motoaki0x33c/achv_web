@@ -27,7 +27,7 @@
   - 自動部屬：Cloud Build
 
 ## 問題紀錄
-- evn 使用 zip 帶密碼壓縮，但在 window 中 壓縮時需選擇`傳統加密法`，才可在 linux 上解壓縮
+- .env 使用 zip 帶密碼壓縮，但在 window 中 壓縮時需選擇`傳統加密法`，才可在 linux 上解壓縮
 - 部屬要使用的 port 需與 cloud run 預設的值一樣(8080)，80 與 443 cloud run 會自行處理，不需要自行加開 port
 - 如果`nginx.conf`的`fastcgi_pass php_upstream;`無法使用，則改成`127.0.0.1:9000`
 - 在觸發條件的 cloudbuild.yaml 中，要增加的變數不只在`args`中要寫，最下方`tags`也要加上，不然不能使用
