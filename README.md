@@ -7,60 +7,28 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## 關於練習專案
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+一個以「日常探索」為主的網站／平台，每天提供用戶一個簡單、趣味、可執行的城市生活任務，透過打卡、照片分享、留言互動，建立一個 探索生活 × 社群激勵 的平台。
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 開發環境
+- php：8.4
+- 後端：Laravel 12
+- 前端：Vue3 + Inertia.js (SPA)
+- 認證系統：Laravel Sanctum
+- 前端樣式：Tailwind CSS
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 架設環境
+- git：github
+- 伺服器：Nginx
+- 使用 Google Cloud 服務：
+  - 服務容器：Cloud Run
+  - SQL：MySQL 8.0
+  - 自動部屬：Cloud Build
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 問題紀錄
+- evn 使用 zip 帶密碼壓縮，但在 window 中 壓縮時需選擇`傳統加密法`，才可在 linux 上解壓縮
+- 部屬要使用的 port 需與 cloud run 預設的值一樣(8080)，80 與 443 cloud run 會自行處理，不需要自行加開 port
+- 如果`nginx.conf`的`fastcgi_pass php_upstream;`無法使用，則改成`127.0.0.1:9000`
+- 在觸發條件的 cloudbuild.yaml 中，要增加的變數不只在`args`中要寫，最下方`tags`也要加上，不然不能使用
+- laravel 中如果出現引入的資源被擋下(mixed block)，直接在`app\Providers\AppServiceProvider.php`中加上`URL::forceScheme('https');`就好
